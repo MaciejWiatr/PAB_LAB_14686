@@ -1,0 +1,13 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type CurrentStats {
+  usersCount: Int!
+  booksCount: Int!
+  reviewCount: Int!
+}
+
+type Query {
+  currentStats: CurrentStats!
+}

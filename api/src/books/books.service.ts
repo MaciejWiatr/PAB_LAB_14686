@@ -13,12 +13,13 @@ export class BooksService {
 
   create(createBookDto: CreateBookDto) {
     const newBook = this.bookRepository.create(createBookDto);
+    newBook.user = <any>{ id: createBookDto.userId };
 
     return this.bookRepository.save(newBook);
   }
 
   findAll() {
-    return this.bookRepository.find();
+    return this.bookRepository.find({ relations: ['user'] });
   }
 
   findOne(id: number) {

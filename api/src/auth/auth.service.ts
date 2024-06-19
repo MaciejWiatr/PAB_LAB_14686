@@ -1,8 +1,13 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { CryptoService } from 'src/crypto/crypto.service';
 import { JwtUserDto } from './dto/jwt-user.dto';
+import { AccessTokenDto } from './dto/access-token.dto';
 
 @Injectable()
 export class AuthService {
@@ -12,11 +17,12 @@ export class AuthService {
     private cryptoService: CryptoService,
   ) {}
 
-  async signIn(
-    username: string,
-    pass: string,
-  ): Promise<{ access_token: string }> {
+  async signIn(username: string, pass: string): Promise<AccessTokenDto> {
     const user = await this.usersService.findByUserName(username);
+
+    if (!user) {
+      throw new NotFoundException();
+    }
 
     if (!this.cryptoService.comparePassword(pass, user.password)) {
       throw new UnauthorizedException();

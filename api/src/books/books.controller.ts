@@ -23,6 +23,8 @@ export class BooksController {
   @Post()
   @Roles([Role.ADMIN])
   create(@Req() req: Request, @Body() createBookDto: CreateBookDto) {
+    console.log('test');
+
     return this.booksService.create(createBookDto);
   }
 

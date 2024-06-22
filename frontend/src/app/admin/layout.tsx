@@ -22,8 +22,6 @@ const AdminLayout: FC<PropsWithChildren> = ({ children }) => {
   const { user, isLoading } = useCurrentUser();
   const router = useRouter();
 
-  console.log(user, isLoading);
-
   useEffect(() => {
     if (isLoading) return;
 

@@ -45,6 +45,8 @@ export default function LoginPage() {
       setTimeout(() => {
         push("/admin/books");
       }, 500);
+    } else {
+      form.setFieldError("username", "Invalid login");
     }
   };
 

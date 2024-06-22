@@ -2,6 +2,7 @@ import { api } from "./client.global";
 
 export const apiCreateReview = (data: {
   rating: number;
+  bookId: number;
   userId: number;
   createdAt: string;
   updatedAt: string;

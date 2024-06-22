@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "start:dev": "next dev",
-    "build:prod": "next build",
-    "start:prod": "next start",
+    "build": "next build",
+    "start": "next start",
     "lint": "next lint",
     "gen:types": "npx openapi-typescript http://localhost:3001/api-yaml -o src/types/backend.d.ts -t"
   },

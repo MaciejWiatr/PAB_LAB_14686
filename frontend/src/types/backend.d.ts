@@ -3,340 +3,613 @@
  * Do not make direct changes to the file.
  */
 
-
 export type paths = {
-  "/": {
-    get: operations["AppController_getHello"];
-  };
-  "/users/current": {
-    get: operations["UsersController_current"];
-  };
-  "/users": {
-    get: operations["UsersController_findAll"];
-    post: operations["UsersController_create"];
-  };
-  "/users/{id}": {
-    get: operations["UsersController_findOne"];
-    delete: operations["UsersController_remove"];
-    patch: operations["UsersController_update"];
-  };
-  "/books": {
-    get: operations["BooksController_findAll"];
-    post: operations["BooksController_create"];
-  };
-  "/books/{id}": {
-    get: operations["BooksController_findOne"];
-    delete: operations["BooksController_remove"];
-    patch: operations["BooksController_update"];
-  };
-  "/auth/login": {
-    post: operations["AuthController_signIn"];
-  };
-  "/auth/register": {
-    post: operations["AuthController_register"];
-  };
-  "/reviews": {
-    post: operations["ReviewsController_create"];
-  };
-  "/reviews/{id}": {
-    delete: operations["ReviewsController_remove"];
-  };
+    "/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AppController_getHello"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/users/current": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["UsersController_current"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["UsersController_findAll"];
+        put?: never;
+        post: operations["UsersController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/users/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["UsersController_findOne"];
+        put?: never;
+        post?: never;
+        delete: operations["UsersController_remove"];
+        options?: never;
+        head?: never;
+        patch: operations["UsersController_update"];
+        trace?: never;
+    };
+    "/books": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["BooksController_findAll"];
+        put?: never;
+        post: operations["BooksController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/books/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["BooksController_findOne"];
+        put?: never;
+        post?: never;
+        delete: operations["BooksController_remove"];
+        options?: never;
+        head?: never;
+        patch: operations["BooksController_update"];
+        trace?: never;
+    };
+    "/auth/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AuthController_signIn"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/register": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AuthController_register"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/reviews": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ReviewsController_findAll"];
+        put?: never;
+        post: operations["ReviewsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/reviews/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["ReviewsController_remove"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 };
-
 export type webhooks = Record<string, never>;
-
 export type components = {
-  schemas: {
-    Review: {
-      id: number;
-      rating: number;
-      user: components["schemas"]["User"];
-      /** Format: date-time */
-      createdAt: string;
-      /** Format: date-time */
-      updatedAt: string;
+    schemas: {
+        Review: {
+            id: number;
+            rating: number;
+            user: components["schemas"]["User"];
+            book: components["schemas"]["Book"];
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        User: {
+            id: number;
+            username: string;
+            password: string;
+            role: string;
+            books: components["schemas"]["Book"][];
+            reviews: components["schemas"]["Review"][];
+        };
+        Book: {
+            id: number;
+            name: string;
+            description: string;
+            user: components["schemas"]["User"];
+            reviews: components["schemas"]["Review"][];
+            /** Format: date-time */
+            publishedAt: string;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        CreateUserDto: {
+            username: string;
+            password: string;
+            /** @enum {string} */
+            role: "USER" | "ADMIN";
+        };
+        UpdateUserDto: {
+            /** @enum {string} */
+            role?: "USER" | "ADMIN";
+            username?: string;
+            password?: string;
+        };
+        CreateBookDto: {
+            name: string;
+            description: string;
+            userId: number;
+            /** Format: date-time */
+            publishedAt: string;
+        };
+        UpdateBookDto: {
+            name?: string;
+            description?: string;
+            publishedAt?: string;
+            userId?: number;
+        };
+        SignInDto: {
+            username: string;
+            password: string;
+        };
+        AccessTokenDto: {
+            access_token: string;
+        };
+        RegisterDto: {
+            username: string;
+            password: string;
+        };
+        CreateReviewDto: {
+            rating: number;
+            userId: number;
+            bookId: number;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
     };
-    User: {
-      id: number;
-      username: string;
-      password: string;
-      role: string;
-      books: components["schemas"]["Book"][];
-      reviews: components["schemas"]["Review"][];
-    };
-    Book: {
-      id: number;
-      name: string;
-      description: string;
-      user: components["schemas"]["User"];
-      /** Format: date-time */
-      publishedAt: string;
-      /** Format: date-time */
-      createdAt: string;
-      /** Format: date-time */
-      updatedAt: string;
-    };
-    CreateUserDto: {
-      username: string;
-      password: string;
-    };
-    UpdateUserDto: {
-      /** @enum {string} */
-      role?: "USER" | "ADMIN";
-      username?: string;
-      password?: string;
-    };
-    CreateBookDto: {
-      name: string;
-      description: string;
-      userId: number;
-      /** Format: date-time */
-      publishedAt: string;
-      /** Format: date-time */
-      createdAt: string;
-      /** Format: date-time */
-      updatedAt: string;
-    };
-    UpdateBookDto: Record<string, never>;
-    SignInDto: {
-      username: string;
-      password: string;
-    };
-    AccessTokenDto: {
-      access_token: string;
-    };
-    RegisterDto: {
-      username: string;
-      password: string;
-    };
-    CreateReviewDto: {
-      rating: number;
-      userId: number;
-      /** Format: date-time */
-      createdAt: string;
-      /** Format: date-time */
-      updatedAt: string;
-    };
-  };
-  responses: never;
-  parameters: never;
-  requestBodies: never;
-  headers: never;
-  pathItems: never;
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
 };
-
 export type $defs = Record<string, never>;
-
-export type external = Record<string, never>;
-
-export type operations = {
-
-  AppController_getHello: {
-    responses: {
-      200: {
-        content: {
-          "application/json": string;
+export interface operations {
+    AppController_getHello: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-      };
-    };
-  };
-  UsersController_current: {
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["User"];
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
         };
-      };
     };
-  };
-  UsersController_findAll: {
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["User"][];
+    UsersController_current: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-      };
-    };
-  };
-  UsersController_create: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateUserDto"];
-      };
-    };
-    responses: {
-      201: {
-        content: {
-          "application/json": components["schemas"]["User"];
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["User"];
+                };
+            };
         };
-      };
     };
-  };
-  UsersController_findOne: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["User"];
+    UsersController_findAll: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-      };
-    };
-  };
-  UsersController_remove: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": boolean;
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["User"][];
+                };
+            };
         };
-      };
     };
-  };
-  UsersController_update: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateUserDto"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": Record<string, never>;
+    UsersController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-      };
-    };
-  };
-  BooksController_findAll: {
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Book"][];
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateUserDto"];
+            };
         };
-      };
-    };
-  };
-  BooksController_create: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateBookDto"];
-      };
-    };
-    responses: {
-      201: {
-        content: {
-          "application/json": components["schemas"]["Book"];
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["User"];
+                };
+            };
         };
-      };
     };
-  };
-  BooksController_findOne: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Book"];
+    UsersController_findOne: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
         };
-      };
-    };
-  };
-  BooksController_remove: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      200: {
-        content: never;
-      };
-    };
-  };
-  BooksController_update: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateBookDto"];
-      };
-    };
-    responses: {
-      200: {
-        content: never;
-      };
-    };
-  };
-  AuthController_signIn: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["SignInDto"];
-      };
-    };
-    responses: {
-      201: {
-        content: {
-          "application/json": components["schemas"]["AccessTokenDto"];
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["User"];
+                };
+            };
         };
-      };
     };
-  };
-  AuthController_register: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["RegisterDto"];
-      };
-    };
-    responses: {
-      201: {
-        content: {
-          "application/json": components["schemas"]["User"];
+    UsersController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
         };
-      };
-    };
-  };
-  ReviewsController_create: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateReviewDto"];
-      };
-    };
-    responses: {
-      201: {
-        content: {
-          "application/json": components["schemas"]["Review"];
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": boolean;
+                };
+            };
         };
-      };
     };
-  };
-  ReviewsController_remove: {
-    parameters: {
-      path: {
-        id: string;
-      };
+    UsersController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateUserDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
+            };
+        };
     };
-    responses: {
-      200: {
-        content: never;
-      };
+    BooksController_findAll: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Book"][];
+                };
+            };
+        };
     };
-  };
-};
+    BooksController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateBookDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Book"];
+                };
+            };
+        };
+    };
+    BooksController_findOne: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Book"];
+                };
+            };
+        };
+    };
+    BooksController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    BooksController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateBookDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AuthController_signIn: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SignInDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AccessTokenDto"];
+                };
+            };
+        };
+    };
+    AuthController_register: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RegisterDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["User"];
+                };
+            };
+        };
+    };
+    ReviewsController_findAll: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Review"][];
+                };
+            };
+        };
+    };
+    ReviewsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateReviewDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Review"];
+                };
+            };
+        };
+    };
+    ReviewsController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+}

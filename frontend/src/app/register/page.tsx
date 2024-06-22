@@ -1,58 +1,40 @@
 "use client";
 
-import { signIn } from "@/api/user";
-import { saveToken } from "@/helpers/auth.helper";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
-import { UserRole } from "@/types/user.types";
+import { register } from "@/api/user";
 import {
-  Alert,
-  Button,
   Card,
-  Flex,
   LoadingOverlay,
-  Text,
+  Flex,
   TextInput,
+  Button,
+  Text,
+  Alert,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useMutation } from "@tanstack/react-query";
-import { isEmpty } from "lodash";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const { push } = useRouter();
   const sp = useSearchParams();
-  const message = sp.get("message");
-  const username = sp.get("username");
-  const { user, refetch: refetchUser, isLoading } = useCurrentUser();
 
   const form = useForm({
     mode: "uncontrolled",
     initialValues: {
-      username: username || "",
+      username: "",
       password: "",
     },
   });
 
-  const onSuccess = (response: Awaited<ReturnType<typeof signIn>>) => {
-    const { data } = response || {};
-
-    if (data?.access_token) {
-      saveToken(data.access_token);
-      refetchUser();
-
-      setTimeout(() => {
-        push("/admin/books");
-      }, 500);
-    }
-  };
-
   const { mutate, isPending } = useMutation({
-    mutationFn: signIn,
-    onSuccess,
+    mutationFn: register,
+    onSuccess: ({ data }) => {
+      push(`/login?username=${data?.username}`);
+    },
     onError: (err) => {
-      form.setFieldError("username", "Invalid login");
+      form.setFieldError("username", err.message);
     },
   });
 
@@ -70,26 +52,17 @@ export default function LoginPage() {
         withBorder
         w="500"
       >
-        {message && (
-          <Alert variant="light" color="red" title="Alert" w="100%" mb="md">
-            {message}
-          </Alert>
-        )}
-        {!isEmpty(user) && user.role === UserRole.ADMIN && (
-          <Alert mb="md">
-            You are currently logged in as admin{" "}
-            <Link href="/admin/books" className="no-underline text-blue-500">
-              Go back to admin panel
-            </Link>
-          </Alert>
-        )}
         <LoadingOverlay
           visible={isPending}
           zIndex={1000}
           overlayProps={{ radius: "sm", blur: 2 }}
         />
+        <Alert mb="md">
+          For sake of demo all registered users are admins by default
+        </Alert>
+
         <Text fw={500} size="lg" mb="md">
-          BookReview Admin login
+          Register new user
         </Text>
 
         <form onSubmit={form.onSubmit(onSubmit)}>
@@ -111,13 +84,14 @@ export default function LoginPage() {
             />
 
             <Button type="submit" color="blue" fullWidth radius="md">
-              Sign in
+              Register
             </Button>
+
             <Link
-              href="/register"
+              href="/login"
               className="mx-auto no-underline text-blue-500 text-sm"
             >
-              Register
+              Back to login
             </Link>
           </Flex>
         </form>

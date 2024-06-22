@@ -29,17 +29,19 @@ export class UsersController {
   }
 
   @Post()
+  @Roles([Role.ADMIN])
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
-  @Roles([Role.ADMIN])
   @Get()
+  @Roles([Role.ADMIN])
   findAll() {
     return this.usersService.findAll();
   }
 
   @Get(':id')
+  @Public()
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);
   }

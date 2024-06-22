@@ -1,4 +1,5 @@
 import { Max, Min } from 'class-validator';
+import { Book } from 'src/books/entities/book.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
   Column,
@@ -21,6 +22,9 @@ export class Review {
 
   @ManyToOne(() => User, (u) => u.reviews)
   user: User;
+
+  @ManyToOne(() => Book, (b) => b.reviews)
+  book: Book;
 
   @CreateDateColumn()
   createdAt: Date;

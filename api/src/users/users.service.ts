@@ -14,9 +14,10 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const newUser = await this.userRepository.create({
+    const newUser = this.userRepository.create({
       username: createUserDto.username,
       password: await this.cryptoService.hashPassword(createUserDto.password),
+      role: createUserDto.role,
     });
 
     return this.userRepository.save(newUser);

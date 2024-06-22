@@ -1,4 +1,4 @@
-import { paths } from "./backend";
+import { components, paths } from "./backend";
 
 // Helper type to extract the response type from an operation
 type ExtractResponseType<T> = T extends { responses: infer U } ? U : never;
@@ -29,3 +29,6 @@ export type GetResponseType<
 > = JsonResponseContentType<
   ExtractJsonResponse<MethodResponse<paths[Path], Method>>
 >;
+
+export type GetSchema<Name extends keyof components["schemas"]> =
+  components["schemas"][Name];

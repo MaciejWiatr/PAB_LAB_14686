@@ -1,9 +1,11 @@
+import { Review } from 'src/reviews/entities/review.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -22,7 +24,10 @@ export class Book {
   @ManyToOne(() => User, (user) => user.books)
   user: User;
 
-  @Column()
+  @OneToMany(() => Review, (review) => review.book)
+  reviews: Review[];
+
+  @Column({ default: 'now()' })
   publishedAt: Date;
 
   @CreateDateColumn()

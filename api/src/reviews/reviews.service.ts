@@ -12,12 +12,14 @@ export class ReviewsService {
 
   create(createReviewDto: CreateReviewDto) {
     const newReview = this.reviewRepository.create(createReviewDto);
+    newReview.user = <any>{ id: createReviewDto['userId'] };
+    newReview.book = <any>{ id: createReviewDto['bookId'] };
 
     return this.reviewRepository.save(newReview);
   }
 
   findAll() {
-    return this.reviewRepository.find();
+    return this.reviewRepository.find({ relations: ['user'] });
   }
 
   findOne(id: number) {

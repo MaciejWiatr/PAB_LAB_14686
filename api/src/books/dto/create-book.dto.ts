@@ -3,6 +3,4 @@ export class CreateBookDto {
   description: string;
   userId: number;
   publishedAt: Date;
-  createdAt: Date;
-  updatedAt: Date;
 }

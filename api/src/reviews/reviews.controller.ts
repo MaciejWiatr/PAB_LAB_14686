@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Param, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Param, Delete, Get } from '@nestjs/common';
 import { ReviewsService } from './reviews.service';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
@@ -20,5 +20,11 @@ export class ReviewsController {
   @Roles([Role.ADMIN])
   remove(@Param('id') id: string) {
     return this.reviewsService.remove(+id);
+  }
+
+  @Get('/')
+  @Roles([Role.ADMIN])
+  findAll() {
+    return this.reviewsService.findAll();
   }
 }

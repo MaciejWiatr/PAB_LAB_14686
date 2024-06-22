@@ -1,10 +1,19 @@
 "use client";
 
+import { removeToken } from "@/helpers/auth.helper";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { UserRole } from "@/types/user.types";
-import { AppShell, Burger, NavLink } from "@mantine/core";
+import {
+  AppShell,
+  Burger,
+  Button,
+  Flex,
+  LoadingOverlay,
+  NavLink,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { BarChart, Book, NotepadText, Users } from "lucide-react";
+import { isEmpty } from "lodash";
+import { BarChart, Book, LogOut, NotepadText, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { FC, PropsWithChildren, useEffect } from "react";
 
@@ -13,12 +22,22 @@ const AdminLayout: FC<PropsWithChildren> = ({ children }) => {
   const { user, isLoading } = useCurrentUser();
   const router = useRouter();
 
-  useEffect(() => {
-    if (isLoading || !user) return;
+  console.log(user, isLoading);
 
-    if (user.role !== UserRole.ADMIN) {
-      router.push("/login?message=Users are not allowed in admin panel");
+  useEffect(() => {
+    if (isLoading) return;
+
+    if (isEmpty(user)) {
+      router.push("/login?message=You are not logged in");
+      return;
     }
+
+    if (!isEmpty(user) && user.role !== UserRole.ADMIN) {
+      router.push("/login?message=Users are not allowed in admin panel");
+      return;
+    }
+
+    return;
   }, [isLoading, router, user]);
 
   return (
@@ -32,10 +51,12 @@ const AdminLayout: FC<PropsWithChildren> = ({ children }) => {
       padding="md"
     >
       <AppShell.Header>
-        <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-        <div>
-          Logged in as {user?.username} / {user?.role}
-        </div>
+        <Flex justify="space-between" align="center" h="100%" p="sm">
+          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+          <div>
+            Logged in as {user?.username}, role: {user?.role}
+          </div>
+        </Flex>
       </AppShell.Header>
 
       <AppShell.Navbar p="md">
@@ -59,9 +80,27 @@ const AdminLayout: FC<PropsWithChildren> = ({ children }) => {
           label="Statistics"
           leftSection={<BarChart size={20} />}
         />
+        <Button
+          mt="auto"
+          color="red"
+          variant="light"
+          onClick={() => {
+            removeToken();
+            router.push("/login");
+          }}
+        >
+          <LogOut className="mr-2" size={20} /> Log out
+        </Button>
       </AppShell.Navbar>
 
-      <AppShell.Main>{children}</AppShell.Main>
+      <AppShell.Main className="relative">
+        <LoadingOverlay
+          visible={isLoading}
+          zIndex={1000}
+          overlayProps={{ radius: "sm", blur: 2 }}
+        />
+        {children}
+      </AppShell.Main>
     </AppShell>
   );
 };

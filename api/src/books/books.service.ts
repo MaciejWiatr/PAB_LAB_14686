@@ -26,8 +26,15 @@ export class BooksService {
     return this.bookRepository.findOneBy({ id });
   }
 
-  update(id: number, updateBookDto: UpdateBookDto) {
-    return this.bookRepository.update(id, updateBookDto);
+  async update(id: number, updateBookDto: UpdateBookDto) {
+    const { userId, ...bookUpdates } = updateBookDto;
+
+    // If there's a userId, add it as a nested relation update.
+    const updateData = userId
+      ? { ...bookUpdates, user: { id: userId } }
+      : bookUpdates;
+
+    return await this.bookRepository.update(id, updateData);
   }
 
   remove(id: number) {

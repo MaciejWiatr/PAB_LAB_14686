@@ -6,7 +6,6 @@ import {
   Patch,
   Param,
   Delete,
-  Req,
 } from '@nestjs/common';
 import { BooksService } from './books.service';
 import { CreateBookDto } from './dto/create-book.dto';
@@ -14,6 +13,7 @@ import { UpdateBookDto } from './dto/update-book.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { Role } from 'src/auth/auth.constants';
 import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Public } from 'src/auth/decorators/Public.decorator';
 
 @ApiBearerAuth()
 @Controller('books')
@@ -22,14 +22,12 @@ export class BooksController {
 
   @Post()
   @Roles([Role.ADMIN])
-  create(@Req() req: Request, @Body() createBookDto: CreateBookDto) {
-    console.log('test');
-
+  create(@Body() createBookDto: CreateBookDto) {
     return this.booksService.create(createBookDto);
   }
 
   @Get()
-  @Roles([Role.ADMIN])
+  @Public()
   findAll() {
     return this.booksService.findAll();
   }
